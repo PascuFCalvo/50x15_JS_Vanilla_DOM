@@ -515,6 +515,7 @@ const preguntas = {
 
 // Puedes continuar con más preguntas si lo deseas
 
+let preguntaAsidoGenerada = false;
 let correcto = false;
 let preguntaHTML = "";
 let preguntaGenerada = {};
@@ -522,6 +523,12 @@ let respuestaCorrecta = "";
 let preguntasRealizadas = [];
 let numeroAleatorio;
 let comodin50usado = false;
+let comodinPublicoUsado = false;
+
+respuesta1 = document.getElementById("respuesta1");
+respuesta2 = document.getElementById("respuesta2");
+respuesta3 = document.getElementById("respuesta3");
+respuesta4 = document.getElementById("respuesta4");
 
 generarNuevaPregunta = () => {
   resetVisibility();
@@ -548,25 +555,21 @@ printPregunta = () => {
   const pregunta = preguntaGenerada;
   const preguntaHTML = document.getElementById("tituloPregunta");
   preguntaHTML.innerHTML = pregunta.pregunta;
-  respuesta1 = document.getElementById("respuesta1");
   respuesta1.innerHTML = pregunta.opciones.a;
   respuesta1.addEventListener("click", () => {
     opcionElegida = "a";
     checkVictoria();
   });
-  respuesta2 = document.getElementById("respuesta2");
   respuesta2.innerHTML = pregunta.opciones.b;
   respuesta2.addEventListener("click", () => {
     opcionElegida = "b";
     checkVictoria();
   });
-  respuesta3 = document.getElementById("respuesta3");
   respuesta3.innerHTML = pregunta.opciones.c;
   respuesta3.addEventListener("click", () => {
     opcionElegida = "c";
     checkVictoria();
   });
-  respuesta4 = document.getElementById("respuesta4");
   respuesta4.innerHTML = pregunta.opciones.d;
   respuesta4.addEventListener("click", () => {
     opcionElegida = "d";
@@ -612,6 +615,47 @@ comodin50porciento = () => {
   }
 };
 
+comodinPublico = () => {
+  if (comodinPublicoUsado) {
+    alert("Comodín ya usado");
+    return;
+  }
+
+  let porcentajes = [];
+  porcentajes.push(Math.floor(Math.random() * 100 + 1));
+  porcentajes.push(Math.floor(Math.random() * (100 - porcentajes[0]) + 1));
+  porcentajes.push(
+    Math.floor(Math.random() * (100 - (porcentajes[0] + porcentajes[1])) + 1)
+  );
+  porcentajes.push(100 - (porcentajes[0] + porcentajes[1] + porcentajes[2]));
+  porcentajes.sort((a, b) => b - a);
+
+  if (respuestaCorrecta === "a") {
+    respuesta1.innerHTML = `${preguntaGenerada.opciones.a} ${porcentajes[0]}%`;
+    respuesta2.innerHTML = `${preguntaGenerada.opciones.b} ${porcentajes[1]}%`;
+    respuesta3.innerHTML = `${preguntaGenerada.opciones.c} ${porcentajes[2]}%`;
+    respuesta4.innerHTML = `${preguntaGenerada.opciones.d} ${porcentajes[3]}%`;
+  } else if (respuestaCorrecta === "b") {
+    respuesta1.innerHTML = `${preguntaGenerada.opciones.a} ${porcentajes[1]}%`;
+    respuesta2.innerHTML = `${preguntaGenerada.opciones.b} ${porcentajes[0]}%`;
+    respuesta3.innerHTML = `${preguntaGenerada.opciones.c} ${porcentajes[2]}%`;
+    respuesta4.innerHTML = `${preguntaGenerada.opciones.d} ${porcentajes[3]}%`;
+  } else if (respuestaCorrecta === "c") {
+    respuesta1.innerHTML = `${preguntaGenerada.opciones.a} ${porcentajes[1]}%`;
+    respuesta2.innerHTML = `${preguntaGenerada.opciones.b} ${porcentajes[2]}%`;
+    respuesta3.innerHTML = `${preguntaGenerada.opciones.c} ${porcentajes[0]}%`;
+    respuesta4.innerHTML = `${preguntaGenerada.opciones.d} ${porcentajes[3]}%`;
+  } else if (respuestaCorrecta === "d") {
+    respuesta1.innerHTML = `${preguntaGenerada.opciones.a} ${porcentajes[1]}%`;
+    respuesta2.innerHTML = `${preguntaGenerada.opciones.b} ${porcentajes[2]}%`;
+    respuesta3.innerHTML = `${preguntaGenerada.opciones.c} ${porcentajes[3]}%`;
+    respuesta4.innerHTML = `${preguntaGenerada.opciones.d} ${porcentajes[0]}%`;
+  }
+
+  comodinPublicoUsado = true;
+  botonpublico.style.backgroundColor = "red";
+};
+
 resetVisibility = () => {
   respuesta1.style.visibility = "visible";
   respuesta2.style.visibility = "visible";
@@ -620,20 +664,20 @@ resetVisibility = () => {
 };
 
 botonPregunta = document.getElementById("generarPregunta");
-
 botonPregunta.addEventListener("click", () => {
   resetVisibility();
   generarPregunta();
   printPregunta();
+  preguntaAsidoGenerada = true;
 });
 
 boton50porciento = document.getElementById("boton50porciento");
-respuesta1 = document.getElementById("respuesta1");
-respuesta2 = document.getElementById("respuesta2");
-respuesta3 = document.getElementById("respuesta3");
-respuesta4 = document.getElementById("respuesta4");
-
 boton50porciento.addEventListener("click", () => {
+  if (!preguntaAsidoGenerada) {
+    alert("Primero genera una pregunta");
+    return;
+  }
+
   if (comodin50usado) {
     alert("Comodín ya usado");
     return;
@@ -641,4 +685,13 @@ boton50porciento.addEventListener("click", () => {
   comodin50usado = true;
   boton50porciento.style.backgroundColor = "red";
   comodin50porciento();
+});
+
+botonpublico = document.getElementById("botonPublico");
+botonpublico.addEventListener("click", () => {
+  if (!preguntaAsidoGenerada) {
+    alert("Primero genera una pregunta");
+    return;
+  }
+  comodinPublico();
 });
