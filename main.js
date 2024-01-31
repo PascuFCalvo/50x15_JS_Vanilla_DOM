@@ -12,6 +12,7 @@ let comodinPublicoUsado = false;
 let comodinSaltarUsado = false;
 let rondaActualValue = 1;
 let tiempo;
+let cuentaAtrasTimeout;
 
 const botonPlantarse = document.getElementById("botonPlantarse");
 botonPlantarse.addEventListener("click", () => {
@@ -78,7 +79,9 @@ const rondas = document.getElementsByClassName("ronda");
 const cuentaAtras = () => {
   const tiempoHTML = document.getElementById("solucion");
   tiempoHTML.innerHTML = tiempo;
-  setTimeout(() => {
+
+  clearTimeout(cuentaAtrasTimeout);
+  cuentaAtrasTimeout = setTimeout(() => {
     if (tiempo === 0) return;
     tiempo--;
     cuentaAtras();
@@ -89,14 +92,14 @@ const cuentaAtras = () => {
   }
 };
 
-function resetAnimation() {
+const resetAnimation = () => {
   const bola = document.getElementById("solucionBola");
 
   bola.style.animation = "none";
   setTimeout(() => {
     bola.style.animation = "crecerAncho 60s linear";
   }, 1);
-}
+};
 
 const generarNuevaPregunta = () => {
   tiempo = 60;
