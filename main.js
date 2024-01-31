@@ -532,7 +532,7 @@ const marcador = {
   pregunta5: {
     valor: 1000,
     acertada: false,
-    plantarse: false,
+    plantarse: true,
   },
   pregunta6: {
     valor: 2000,
@@ -553,7 +553,7 @@ const marcador = {
   pregunta10: {
     valor: 32000,
     acertada: false,
-    plantarse: false,
+    plantarse: true,
   },
   pregunta11: {
     valor: 64000,
@@ -596,6 +596,10 @@ generarNuevaPregunta = () => {
   generarPregunta();
   printPregunta();
   rondaActualValue++;
+
+  if (rondaActualValue === 6 || rondaActualValue === 11) {
+    document.getElementById("botonPlantarse").style.display = "block";
+  }
 };
 
 generarPregunta = () => {
@@ -758,6 +762,10 @@ calcularPuntuacionActual = () => {
   puntuacionActualHTML = document.getElementById("puntuacion");
   puntuacionActualValue = marcador[`pregunta${rondaActualValue}`].valor;
   puntuacionActualHTML.innerHTML = puntuacionActualValue;
+};
+
+plantarse = () => {
+  alert("Te has plantado, te llevas " + puntuacionActualValue + " euros");
 };
 
 botonConfirmar = document.getElementById("confirmar");

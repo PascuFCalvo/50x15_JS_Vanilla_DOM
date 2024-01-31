@@ -18,3 +18,7 @@ h3 {
    height: 20px;
    background-color: lightblue;
 }
+
+.plantarse {
+   display: none;
+}
