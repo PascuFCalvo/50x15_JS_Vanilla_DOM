@@ -12,7 +12,67 @@ let comodinPublicoUsado = false;
 let comodinSaltarUsado = false;
 let rondaActualValue = 1;
 
-console.log(preguntas);
+const botonPlantarse = document.getElementById("botonPlantarse");
+botonPlantarse.addEventListener("click", () => {
+  plantarse();
+});
+
+const botonConfirmar = document.getElementById("confirmar");
+botonConfirmar.addEventListener("click", () => {
+  if (!preguntaAsidoGenerada) {
+    alert("Primero genera una pregunta");
+    return;
+  }
+  if (opcionElegida === "") {
+    alert("Primero elige una respuesta");
+    return;
+  }
+  checkVictoria();
+});
+
+const botonPregunta = document.getElementById("generarPregunta");
+botonPregunta.addEventListener("click", () => {
+  resetVisibility();
+  generarNuevaPregunta();
+  printPregunta();
+  preguntaAsidoGenerada = true;
+});
+
+const boton50porciento = document.getElementById("boton50porciento");
+boton50porciento.addEventListener("click", () => {
+  if (!preguntaAsidoGenerada) {
+    alert("Primero genera una pregunta");
+    return;
+  }
+
+  if (comodin50usado) {
+    alert("Comodín ya usado");
+    return;
+  }
+  comodin50usado = true;
+  boton50porciento.style.backgroundColor = "red";
+  comodin50porciento();
+});
+
+const botonpublico = document.getElementById("botonPublico");
+botonpublico.addEventListener("click", () => {
+  if (!preguntaAsidoGenerada) {
+    alert("Primero genera una pregunta");
+    return;
+  }
+  comodinPublico();
+});
+
+const botonSaltar = document.getElementById("botonSaltar");
+botonSaltar.addEventListener("click", () => {
+  if (!preguntaAsidoGenerada) {
+    alert("Primero genera una pregunta");
+    return;
+  }
+  comodinSaltarPregunta();
+});
+
+const rondas = document.getElementsByClassName("ronda");
 
 const generarNuevaPregunta = () => {
   winCondition();
@@ -22,6 +82,20 @@ const generarNuevaPregunta = () => {
   generarPregunta();
   printPregunta();
   rondaActualValue++;
+
+  document.getElementById("confirmar").style.display = "block";
+  document.getElementById("solucion").style.display = "block";
+  document.getElementById("generarPregunta").style.display = "none";
+  document.getElementById("rondaActual").style.display = "block";
+  document.getElementById("puntuacion").style.display = "block";
+
+  const rondas = Array.from(document.getElementsByClassName("ronda"));
+  rondas.forEach((ronda, index) => {
+    ronda.style.display = "block";
+    ronda.innerHTML = marcador[`pregunta${index + 1}`].valor;
+    ronda.style.color = "white";
+    ronda.style.textAlign = "end";
+  });
 
   if (rondaActualValue === 6 || rondaActualValue === 11) {
     document.getElementById("botonPlantarse").style.display = "block";
@@ -88,6 +162,7 @@ const checkVictoria = () => {
     solucion.style.backgroundColor = "green";
     setTimeout(() => {
       generarNuevaPregunta();
+      rondas[rondaActualValue - 3].style.backgroundColor = "green";
     }, 1000);
   } else {
     solucion.style.backgroundColor = "red";
@@ -180,7 +255,7 @@ const resetVisibility = () => {
 };
 
 const calcularRondaActual = () => {
-  const rondaActualHTML = document.getElementById("ronda");
+  const rondaActualHTML = document.getElementById("rondaActual");
   rondaActualHTML.innerHTML = rondaActualValue;
 };
 
@@ -199,63 +274,3 @@ const winCondition = () => {
     alert("Has ganado 1.000.000 de euros");
   }
 };
-
-const botonPlantarse = document.getElementById("botonPlantarse");
-botonPlantarse.addEventListener("click", () => {
-  plantarse();
-});
-
-const botonConfirmar = document.getElementById("confirmar");
-botonConfirmar.addEventListener("click", () => {
-  if (!preguntaAsidoGenerada) {
-    alert("Primero genera una pregunta");
-    return;
-  }
-  if (opcionElegida === "") {
-    alert("Primero elige una respuesta");
-    return;
-  }
-  checkVictoria();
-});
-
-const botonPregunta = document.getElementById("generarPregunta");
-botonPregunta.addEventListener("click", () => {
-  resetVisibility();
-  generarNuevaPregunta();
-  printPregunta();
-  preguntaAsidoGenerada = true;
-});
-
-const boton50porciento = document.getElementById("boton50porciento");
-boton50porciento.addEventListener("click", () => {
-  if (!preguntaAsidoGenerada) {
-    alert("Primero genera una pregunta");
-    return;
-  }
-
-  if (comodin50usado) {
-    alert("Comodín ya usado");
-    return;
-  }
-  comodin50usado = true;
-  boton50porciento.style.backgroundColor = "red";
-  comodin50porciento();
-});
-
-const botonpublico = document.getElementById("botonPublico");
-botonpublico.addEventListener("click", () => {
-  if (!preguntaAsidoGenerada) {
-    alert("Primero genera una pregunta");
-    return;
-  }
-  comodinPublico();
-});
-
-const botonSaltar = document.getElementById("botonSaltar");
-botonSaltar.addEventListener("click", () => {
-  if (!preguntaAsidoGenerada) {
-    alert("Primero genera una pregunta");
-    return;
-  }
-  comodinSaltarPregunta();
-});
