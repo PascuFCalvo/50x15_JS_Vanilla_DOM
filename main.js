@@ -79,13 +79,24 @@ const cuentaAtras = () => {
   const tiempoHTML = document.getElementById("solucion");
   tiempoHTML.innerHTML = tiempo;
   setTimeout(() => {
+    if (tiempo === 0) return;
     tiempo--;
     cuentaAtras();
   }, 1000);
   if (tiempo === 0) {
     alert("Has perdido");
+    return;
   }
 };
+
+function resetAnimation() {
+  const bola = document.getElementById("solucionBola");
+
+  bola.style.animation = "none";
+  setTimeout(() => {
+    bola.style.animation = "crecerAncho 60s linear";
+  }, 1);
+}
 
 const generarNuevaPregunta = () => {
   tiempo = 60;
@@ -93,16 +104,20 @@ const generarNuevaPregunta = () => {
   calcularRondaActual();
   calcularPuntuacionActual();
   resetVisibility();
+  cuentaAtras();
+  resetAnimation();
   generarPregunta();
   printPregunta();
-  cuentaAtras();
-  rondaActualValue++;
 
+  rondaActualValue++;
   document.getElementById("confirmar").style.display = "block";
   document.getElementById("solucion").style.display = "block";
   document.getElementById("generarPregunta").style.display = "none";
   document.getElementById("rondaActual").style.display = "block";
   document.getElementById("puntuacion").style.display = "block";
+  document.getElementById("solucion").style.display = "block";
+  document.getElementById("barra").style.display = "block";
+  document.getElementById("solucionBola").style.display = "block";
 
   const rondas = Array.from(document.getElementsByClassName("ronda"));
   rondas.forEach((ronda, index) => {
