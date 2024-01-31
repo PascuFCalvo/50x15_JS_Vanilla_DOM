@@ -11,6 +11,7 @@ let comodin50usado = false;
 let comodinPublicoUsado = false;
 let comodinSaltarUsado = false;
 let rondaActualValue = 1;
+let tiempo;
 
 const botonPlantarse = document.getElementById("botonPlantarse");
 botonPlantarse.addEventListener("click", () => {
@@ -74,13 +75,27 @@ botonSaltar.addEventListener("click", () => {
 
 const rondas = document.getElementsByClassName("ronda");
 
+const cuentaAtras = () => {
+  const tiempoHTML = document.getElementById("solucion");
+  tiempoHTML.innerHTML = tiempo;
+  setTimeout(() => {
+    tiempo--;
+    cuentaAtras();
+  }, 1000);
+  if (tiempo === 0) {
+    alert("Has perdido");
+  }
+};
+
 const generarNuevaPregunta = () => {
+  tiempo = 60;
   winCondition();
   calcularRondaActual();
   calcularPuntuacionActual();
   resetVisibility();
   generarPregunta();
   printPregunta();
+  cuentaAtras();
   rondaActualValue++;
 
   document.getElementById("confirmar").style.display = "block";
@@ -128,30 +143,30 @@ const printPregunta = () => {
   respuesta1.addEventListener("click", () => {
     opcionElegida = "a";
     respuesta1.style.backgroundColor = "lightblue";
-    respuesta2.style.backgroundColor = "white";
-    respuesta3.style.backgroundColor = "white";
-    respuesta4.style.backgroundColor = "white";
+    respuesta2.style.backgroundColor = "transparent";
+    respuesta3.style.backgroundColor = "transparent";
+    respuesta4.style.backgroundColor = "transparent";
   });
   respuesta2.addEventListener("click", () => {
     opcionElegida = "b";
     respuesta2.style.backgroundColor = "lightblue";
-    respuesta1.style.backgroundColor = "white";
-    respuesta3.style.backgroundColor = "white";
-    respuesta4.style.backgroundColor = "white";
+    respuesta1.style.backgroundColor = "transparent";
+    respuesta3.style.backgroundColor = "transparent";
+    respuesta4.style.backgroundColor = "transparent";
   });
   respuesta3.addEventListener("click", () => {
     opcionElegida = "c";
     respuesta3.style.backgroundColor = "lightblue";
-    respuesta2.style.backgroundColor = "white";
-    respuesta1.style.backgroundColor = "white";
-    respuesta4.style.backgroundColor = "white";
+    respuesta2.style.backgroundColor = "transparent";
+    respuesta1.style.backgroundColor = "transparent";
+    respuesta4.style.backgroundColor = "transparent";
   });
   respuesta4.addEventListener("click", () => {
     opcionElegida = "d";
     respuesta4.style.backgroundColor = "lightblue";
-    respuesta2.style.backgroundColor = "white";
-    respuesta3.style.backgroundColor = "white";
-    respuesta1.style.backgroundColor = "white";
+    respuesta2.style.backgroundColor = "transparent";
+    respuesta3.style.backgroundColor = "transparent";
+    respuesta1.style.backgroundColor = "transparent";
   });
 };
 
@@ -242,10 +257,10 @@ const comodinSaltarPregunta = () => {
 };
 
 const resetVisibility = () => {
-  respuesta4.style.backgroundColor = "white";
-  respuesta2.style.backgroundColor = "white";
-  respuesta3.style.backgroundColor = "white";
-  respuesta1.style.backgroundColor = "white";
+  respuesta4.style.backgroundColor = "transparent";
+  respuesta2.style.backgroundColor = "transparent";
+  respuesta3.style.backgroundColor = "transparent";
+  respuesta1.style.backgroundColor = "transparent";
   respuesta1.style.visibility = "visible";
   respuesta2.style.visibility = "visible";
   respuesta3.style.visibility = "visible";

@@ -2,11 +2,14 @@ body {
    width: 100vw;
    height: auto;
    background-color: rgb(187, 187, 187);
+   overflow-x: hidden;
 }
 
 h1 {
    color: red
 }
+
+
 
 .solucion {
    font-size: large;
@@ -35,6 +38,11 @@ h1 {
 
 .plantarse {
    display: none;
+}
+
+.respuesta {
+   padding: 0.5em 1em 0.5em 1em;
+   width: 100%
 }
 
 
