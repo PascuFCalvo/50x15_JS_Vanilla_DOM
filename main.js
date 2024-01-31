@@ -512,68 +512,142 @@ const preguntas = {
     correcta: "b",
   },
 };
-
-// Puedes continuar con más preguntas si lo deseas
-
+const marcador = {
+  pregunta1: {
+    valor: 100,
+    acertada: false,
+  },
+  pregunta2: {
+    valor: 200,
+    acertada: false,
+  },
+  pregunta3: {
+    valor: 300,
+    acertada: false,
+  },
+  pregunta4: {
+    valor: 500,
+    acertada: false,
+  },
+  pregunta5: {
+    valor: 1000,
+    acertada: false,
+    plantarse: false,
+  },
+  pregunta6: {
+    valor: 2000,
+    acertada: false,
+  },
+  pregunta7: {
+    valor: 4000,
+    acertada: false,
+  },
+  pregunta8: {
+    valor: 8000,
+    acertada: false,
+  },
+  pregunta9: {
+    valor: 16000,
+    acertada: false,
+  },
+  pregunta10: {
+    valor: 32000,
+    acertada: false,
+    plantarse: false,
+  },
+  pregunta11: {
+    valor: 64000,
+    acertada: false,
+  },
+  pregunta12: {
+    valor: 125000,
+    acertada: false,
+  },
+  pregunta13: {
+    valor: 250000,
+    acertada: false,
+  },
+  pregunta14: {
+    valor: 500000,
+    acertada: false,
+  },
+  pregunta15: {
+    valor: 1000000,
+    acertada: false,
+  },
+};
+let opcionElegida = "";
 let preguntaAsidoGenerada = false;
-let correcto = false;
 let preguntaHTML = "";
 let preguntaGenerada = {};
 let respuestaCorrecta = "";
-let preguntasRealizadas = [];
+let preguntasRealizadas = new Set();
 let numeroAleatorio;
 let comodin50usado = false;
 let comodinPublicoUsado = false;
-
-respuesta1 = document.getElementById("respuesta1");
-respuesta2 = document.getElementById("respuesta2");
-respuesta3 = document.getElementById("respuesta3");
-respuesta4 = document.getElementById("respuesta4");
+let comodinSaltarUsado = false;
+let puntos = 0;
+let rondaActualValue = 1;
 
 generarNuevaPregunta = () => {
+  calcularRondaActual();
+  calcularPuntuacionActual();
   resetVisibility();
   generarPregunta();
-  const solucion = document.getElementById("solucion");
-  solucion.style.backgroundColor = "black";
+  printPregunta();
+  rondaActualValue++;
 };
 
 generarPregunta = () => {
-  numeroAleatorio = Math.floor(Math.random() * 50 + 1);
-
-  while (preguntasRealizadas.includes(numeroAleatorio)) {
-    numeroAleatorio = Math.floor(Math.random() * 50 + 1);
+  console.log("genero pregunta");
+  numeroAleatorio = Math.floor(Math.random() * 50);
+  while (preguntasRealizadas.has(numeroAleatorio)) {
+    numeroAleatorio = Math.floor(Math.random() * 50);
   }
-
-  preguntasRealizadas.push(numeroAleatorio);
-  correcto = false;
+  preguntasRealizadas.add(numeroAleatorio);
   preguntaGenerada = preguntas[`pregunta${numeroAleatorio}`];
   respuestaCorrecta = preguntaGenerada.correcta;
-  console.log(preguntasRealizadas);
+  console.log([...preguntasRealizadas]);
 };
 
 printPregunta = () => {
-  const pregunta = preguntaGenerada;
-  const preguntaHTML = document.getElementById("tituloPregunta");
+  let pregunta = preguntaGenerada;
+
+  let preguntaHTML = document.getElementById("tituloPregunta");
   preguntaHTML.innerHTML = pregunta.pregunta;
+
   respuesta1.innerHTML = pregunta.opciones.a;
+  respuesta2.innerHTML = pregunta.opciones.b;
+  respuesta3.innerHTML = pregunta.opciones.c;
+  respuesta4.innerHTML = pregunta.opciones.d;
+
   respuesta1.addEventListener("click", () => {
     opcionElegida = "a";
-    checkVictoria();
+    respuesta1.style.backgroundColor = "lightblue";
+    respuesta2.style.backgroundColor = "white";
+    respuesta3.style.backgroundColor = "white";
+    respuesta4.style.backgroundColor = "white";
   });
-  respuesta2.innerHTML = pregunta.opciones.b;
   respuesta2.addEventListener("click", () => {
     opcionElegida = "b";
-    checkVictoria();
+    respuesta2.style.backgroundColor = "lightblue";
+    respuesta1.style.backgroundColor = "white";
+    respuesta3.style.backgroundColor = "white";
+    respuesta4.style.backgroundColor = "white";
   });
-  respuesta3.innerHTML = pregunta.opciones.c;
   respuesta3.addEventListener("click", () => {
     opcionElegida = "c";
-    checkVictoria();
+    respuesta3.style.backgroundColor = "lightblue";
+    respuesta2.style.backgroundColor = "white";
+    respuesta1.style.backgroundColor = "white";
+    respuesta4.style.backgroundColor = "white";
   });
-  respuesta4.innerHTML = pregunta.opciones.d;
   respuesta4.addEventListener("click", () => {
     opcionElegida = "d";
-    checkVictoria();
+    respuesta4.style.backgroundColor = "lightblue";
+    respuesta2.style.backgroundColor = "white";
+    respuesta3.style.backgroundColor = "white";
+    respuesta1.style.backgroundColor = "white";
   });
 };
 
@@ -581,21 +655,15 @@ checkVictoria = () => {
   const solucion = document.getElementById("solucion");
 
   if (opcionElegida === respuestaCorrecta) {
-    console.log(opcionElegida + " " + respuestaCorrecta);
-    correcto = true;
     solucion.style.backgroundColor = "green";
     setTimeout(() => {
       generarNuevaPregunta();
-      printPregunta();
-    }, 2000);
+    }, 1000);
   } else {
-    console.log(opcionElegida + " " + respuestaCorrecta);
     solucion.style.backgroundColor = "red";
-    correcto = false;
     setTimeout(() => {
-      generarNuevaPregunta();
-      printPregunta();
-    }, 2000);
+      alert("has perdido");
+    }, 1000);
   }
 };
 
@@ -656,17 +724,59 @@ comodinPublico = () => {
   botonpublico.style.backgroundColor = "red";
 };
 
+comodinSaltarPregunta = () => {
+  if (comodinSaltarUsado) {
+    alert("Comodín ya usado");
+    return;
+  }
+
+  generarNuevaPregunta();
+  printPregunta();
+  comodinSaltarUsado = true;
+  botonSaltar.style.backgroundColor = "red";
+};
+
 resetVisibility = () => {
+  respuesta4.style.backgroundColor = "white";
+  respuesta2.style.backgroundColor = "white";
+  respuesta3.style.backgroundColor = "white";
+  respuesta1.style.backgroundColor = "white";
   respuesta1.style.visibility = "visible";
   respuesta2.style.visibility = "visible";
   respuesta3.style.visibility = "visible";
   respuesta4.style.visibility = "visible";
+  let solucion = document.getElementById("solucion");
+  solucion.style.backgroundColor = "black";
 };
+
+calcularRondaActual = () => {
+  rondaActualHTML = document.getElementById("ronda");
+  rondaActualHTML.innerHTML = rondaActualValue;
+};
+
+calcularPuntuacionActual = () => {
+  puntuacionActualHTML = document.getElementById("puntuacion");
+  puntuacionActualValue = marcador[`pregunta${rondaActualValue}`].valor;
+  puntuacionActualHTML.innerHTML = puntuacionActualValue;
+};
+
+botonConfirmar = document.getElementById("confirmar");
+botonConfirmar.addEventListener("click", () => {
+  if (!preguntaAsidoGenerada) {
+    alert("Primero genera una pregunta");
+    return;
+  }
+  if (opcionElegida === "") {
+    alert("Primero elige una respuesta");
+    return;
+  }
+  checkVictoria();
+});
 
 botonPregunta = document.getElementById("generarPregunta");
 botonPregunta.addEventListener("click", () => {
   resetVisibility();
-  generarPregunta();
+  generarNuevaPregunta();
   printPregunta();
   preguntaAsidoGenerada = true;
 });
@@ -694,4 +804,13 @@ botonpublico.addEventListener("click", () => {
     return;
   }
   comodinPublico();
+});
+
+botonSaltar = document.getElementById("botonSaltar");
+botonSaltar.addEventListener("click", () => {
+  if (!preguntaAsidoGenerada) {
+    alert("Primero genera una pregunta");
+    return;
+  }
+  comodinSaltarPregunta();
 });
