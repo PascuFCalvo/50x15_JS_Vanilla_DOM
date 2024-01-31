@@ -1,3 +1,9 @@
+body {
+   width: 100vw;
+   height: auto;
+   background-color: rgb(187, 187, 187);
+}
+
 h1 {
    color: red
 }
@@ -34,7 +40,7 @@ h1 {
 
 
 .rondas {
-   height: 400px;
+   height: auto;
    background-color: rgb(187, 187, 187);
    display: flex;
    flex-direction: column-reverse;
@@ -43,6 +49,7 @@ h1 {
 }
 
 .ronda {
+   padding: 0.5em;
    display: none;
    width: 100px;
    height: 20px;
