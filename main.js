@@ -11,7 +11,7 @@ let comodin50usado = false;
 let comodinPublicoUsado = false;
 let comodinSaltarUsado = false;
 let rondaActualValue = 1;
-let tiempo;
+let tiempo = 60;
 let cuentaAtrasTimeout;
 let puntuacionActualValue;
 let puntuacionActualHTML;
@@ -80,12 +80,11 @@ botonSaltar.addEventListener("click", () => {
 const rondas = document.getElementsByClassName("ronda");
 
 const cuentaAtras = () => {
-  tiempo = 60;
   clearTimeout(cuentaAtrasTimeout);
   cuentaAtrasTimeout = setTimeout(() => {
-    if (tiempo === 0) return;
     tiempo--;
     cuentaAtras();
+    console.log(tiempo);
   }, 1000);
   if (tiempo === 0) {
     alert("Has perdido");
@@ -129,7 +128,7 @@ const generarNuevaPregunta = () => {
   const rondas = Array.from(document.getElementsByClassName("ronda"));
   rondas.forEach((ronda, index) => {
     ronda.style.display = "block";
-    ronda.innerHTML = marcador[`pregunta${index + 1}`].valor;
+    ronda.innerHTML = marcador[`pregunta${index + 1}`].text;
     ronda.style.color = "white";
     ronda.style.textAlign = "end";
   });
@@ -216,7 +215,7 @@ const printPregunta = () => {
 };
 
 const parpadeo = (opcionElegida) => {
-  const contador = 10;
+  const contador = 6;
   let i = 0;
   let opcion = "";
 
@@ -236,6 +235,7 @@ const parpadeo = (opcionElegida) => {
   const parpadeoInterval = setInterval(() => {
     if (i % 2 !== 0 && i < contador) {
       document.getElementById(opcion).style.backgroundColor = "green";
+      document.getElementById(opcion).style.color = "white";
     } else {
       document.getElementById(opcion).style.backgroundColor = "#313196";
     }
@@ -245,7 +245,7 @@ const parpadeo = (opcionElegida) => {
     if (i >= contador * 2) {
       clearInterval(parpadeoInterval);
     }
-  }, 200);
+  }, 300);
 };
 
 const checkVictoria = () => {
@@ -575,6 +575,7 @@ const comodinPublico = () => {
   const bottom = document.getElementById("bottom");
   setTimeout(() => {
     bottom.appendChild(cuerpoGrafico);
+    scrollToBottom();
   }, 1000);
 
   comodinPublicoUsado = true;
