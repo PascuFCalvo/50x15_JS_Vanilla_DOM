@@ -13,6 +13,9 @@ let comodinSaltarUsado = false;
 let rondaActualValue = 1;
 let tiempo;
 let cuentaAtrasTimeout;
+let puntuacionActualValue;
+let puntuacionActualHTML;
+let aciertos = 0;
 
 const botonPlantarse = document.getElementById("botonPlantarse");
 botonPlantarse.addEventListener("click", () => {
@@ -52,7 +55,7 @@ boton50porciento.addEventListener("click", () => {
     return;
   }
   comodin50usado = true;
-  boton50porciento.style.backgroundColor = "red";
+  boton50porciento.style.backgroundColor = "#ff3333";
   comodin50porciento();
 });
 
@@ -77,6 +80,7 @@ botonSaltar.addEventListener("click", () => {
 const rondas = document.getElementsByClassName("ronda");
 
 const cuentaAtras = () => {
+  tiempo = 60;
   clearTimeout(cuentaAtrasTimeout);
   cuentaAtrasTimeout = setTimeout(() => {
     if (tiempo === 0) return;
@@ -85,13 +89,15 @@ const cuentaAtras = () => {
   }, 1000);
   if (tiempo === 0) {
     alert("Has perdido");
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
     return;
   }
 };
 
 const resetAnimation = () => {
   const bola = document.getElementById("solucionBola");
-
   bola.style.animation = "none";
   setTimeout(() => {
     bola.style.animation = "crecerAncho 60s linear";
@@ -99,13 +105,14 @@ const resetAnimation = () => {
 };
 
 const generarNuevaPregunta = () => {
-  tiempo = 60;
   winCondition();
   calcularRondaActual();
   calcularPuntuacionActual();
-  resetVisibility();
   cuentaAtras();
+
   resetAnimation();
+
+  resetVisibility();
   generarPregunta();
   printPregunta();
 
@@ -118,7 +125,6 @@ const generarNuevaPregunta = () => {
   document.getElementById("confirmar").style.display = "block";
   document.getElementById("generarPregunta").style.display = "none";
   document.getElementById("hide-bottom").style.display = "block";
-
   document.getElementById("barra").style.display = "block";
   document.getElementById("solucionBola").style.display = "block";
   const rondas = Array.from(document.getElementsByClassName("ronda"));
@@ -128,10 +134,6 @@ const generarNuevaPregunta = () => {
     ronda.style.color = "white";
     ronda.style.textAlign = "end";
   });
-
-  if (rondaActualValue === 6 || rondaActualValue === 11) {
-    document.getElementById("botonPlantarse").style.display = "block";
-  }
 };
 
 const generarPregunta = () => {
@@ -160,45 +162,45 @@ const printPregunta = () => {
   respuesta1.addEventListener("click", () => {
     opcionElegida = "a";
     respuesta1.style.backgroundColor = "white";
-    respuesta1.style.color = "#00008b";
-    respuesta2.style.backgroundColor = "#00008b";
+    respuesta1.style.color = "#313196";
+    respuesta2.style.backgroundColor = "#313196";
     respuesta2.style.color = "white";
-    respuesta3.style.backgroundColor = "#00008b";
+    respuesta3.style.backgroundColor = "#313196";
     respuesta3.style.color = "white";
-    respuesta4.style.backgroundColor = "#00008b";
+    respuesta4.style.backgroundColor = "#313196";
     respuesta4.style.color = "white";
   });
   respuesta2.addEventListener("click", () => {
     opcionElegida = "b";
     respuesta2.style.backgroundColor = "white";
-    respuesta2.style.color = "#00008b";
-    respuesta1.style.backgroundColor = "#00008b";
+    respuesta2.style.color = "#313196";
+    respuesta1.style.backgroundColor = "#313196";
     respuesta1.style.color = "white";
-    respuesta3.style.backgroundColor = "#00008b";
+    respuesta3.style.backgroundColor = "#313196";
     respuesta3.style.color = "white";
-    respuesta4.style.backgroundColor = "#00008b";
+    respuesta4.style.backgroundColor = "#313196";
     respuesta4.style.color = "white";
   });
   respuesta3.addEventListener("click", () => {
     opcionElegida = "c";
     respuesta3.style.backgroundColor = "white";
-    respuesta3.style.color = "#00008b";
-    respuesta2.style.backgroundColor = "#00008b";
+    respuesta3.style.color = "#313196";
+    respuesta2.style.backgroundColor = "#313196";
     respuesta2.style.color = "white";
-    respuesta1.style.backgroundColor = "#00008b";
+    respuesta1.style.backgroundColor = "#313196";
     respuesta1.style.color = "white";
-    respuesta4.style.backgroundColor = "#00008b";
+    respuesta4.style.backgroundColor = "#313196";
     respuesta4.style.color = "white";
   });
   respuesta4.addEventListener("click", () => {
     opcionElegida = "d";
     respuesta4.style.backgroundColor = "white";
-    respuesta4.style.color = "#00008b";
-    respuesta2.style.backgroundColor = "#00008b";
+    respuesta4.style.color = "#313196";
+    respuesta2.style.backgroundColor = "#313196";
     respuesta2.style.color = "white";
-    respuesta3.style.backgroundColor = "#00008b";
+    respuesta3.style.backgroundColor = "#313196";
     respuesta3.style.color = "white";
-    respuesta1.style.backgroundColor = "#00008b";
+    respuesta1.style.backgroundColor = "#313196";
     respuesta1.style.color = "white";
   });
 };
@@ -225,7 +227,7 @@ const parpadeo = (opcionElegida) => {
     if (i % 2 !== 0 && i < contador) {
       document.getElementById(opcion).style.backgroundColor = "green";
     } else {
-      document.getElementById(opcion).style.backgroundColor = "#00008b";
+      document.getElementById(opcion).style.backgroundColor = "#313196";
     }
 
     i++;
@@ -239,16 +241,16 @@ const parpadeo = (opcionElegida) => {
 const checkVictoria = () => {
   let opcion = "";
 
-  if (opcionElegida === "a") {
+  if (respuestaCorrecta === "a") {
     opcion = "respuesta1";
   }
-  if (opcionElegida === "b") {
+  if (respuestaCorrecta === "b") {
     opcion = "respuesta2";
   }
-  if (opcionElegida === "c") {
+  if (respuestaCorrecta === "c") {
     opcion = "respuesta3";
   }
-  if (opcionElegida === "d") {
+  if (respuestaCorrecta === "d") {
     opcion = "respuesta4";
   }
 
@@ -256,10 +258,12 @@ const checkVictoria = () => {
     parpadeo(opcionElegida);
     setTimeout(() => {
       generarNuevaPregunta();
+
       rondas[rondaActualValue - 3].style.backgroundColor = "goldenrod";
     }, 2000);
+    aciertos++;
   } else {
-    document.getElementById(opcion).style.backgroundColor = "red";
+    document.getElementById(opcion).style.backgroundColor = "#ff3333";
 
     setTimeout(() => {
       alert("has perdido");
@@ -309,10 +313,10 @@ const comodinPublico = () => {
   cuerpoGrafico.style.justifyContent = "space-around";
   cuerpoGrafico.style.width = "400px";
   cuerpoGrafico.style.height = "200px";
-  cuerpoGrafico.style.backgroundColor = "#00008b";
+  cuerpoGrafico.style.backgroundColor = "#313196";
   cuerpoGrafico.style.border = "2px solid white";
   cuerpoGrafico.style.borderRadius = "10px";
-  cuerpoGrafico.style.margin = "1em";
+  cuerpoGrafico.style.margin = "2em";
 
   if (respuestaCorrecta === "a") {
     const resultado1 = document.createElement("div");
@@ -559,10 +563,12 @@ const comodinPublico = () => {
   }
 
   const bottom = document.getElementById("bottom");
-  bottom.appendChild(cuerpoGrafico);
+  setTimeout(() => {
+    bottom.appendChild(cuerpoGrafico);
+  }, 1000);
 
   comodinPublicoUsado = true;
-  botonpublico.style.backgroundColor = "red";
+  botonpublico.style.backgroundColor = "#ff3333";
 };
 
 const comodinSaltarPregunta = () => {
@@ -574,14 +580,14 @@ const comodinSaltarPregunta = () => {
   generarNuevaPregunta();
   printPregunta();
   comodinSaltarUsado = true;
-  botonSaltar.style.backgroundColor = "red";
+  botonSaltar.style.backgroundColor = "#ff3333";
 };
 
 const resetVisibility = () => {
-  respuesta4.style.backgroundColor = "#00008b";
-  respuesta2.style.backgroundColor = "#00008b";
-  respuesta3.style.backgroundColor = "#00008b";
-  respuesta1.style.backgroundColor = "#00008b";
+  respuesta4.style.backgroundColor = "#313196";
+  respuesta2.style.backgroundColor = "#313196";
+  respuesta3.style.backgroundColor = "#313196";
+  respuesta1.style.backgroundColor = "#313196";
   respuesta4.style.color = "white";
   respuesta2.style.color = "white";
   respuesta3.style.color = "white";
@@ -598,13 +604,20 @@ const calcularRondaActual = () => {
 };
 
 const calcularPuntuacionActual = () => {
-  const puntuacionActualHTML = document.getElementById("puntuacion");
-  const puntuacionActualValue = marcador[`pregunta${rondaActualValue}`].valor;
+  puntuacionActualHTML = document.getElementById("puntuacion");
+  puntuacionActualValue = marcador[`pregunta${rondaActualValue}`].valor;
   puntuacionActualHTML.innerHTML = puntuacionActualValue;
 };
 
 const plantarse = () => {
-  alert("Te has plantado, te llevas " + puntuacionActualValue + " euros");
+  alert(
+    "Te has plantado, te llevas " +
+      marcador[`pregunta${aciertos}`].valor +
+      " euros"
+  );
+  setTimeout(() => {
+    window.location.reload();
+  }, 1000);
 };
 
 const winCondition = () => {

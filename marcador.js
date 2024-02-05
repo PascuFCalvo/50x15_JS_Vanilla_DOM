@@ -18,7 +18,6 @@ export const marcador = {
   pregunta5: {
     valor: 1000,
     acertada: false,
-    plantarse: true,
   },
   pregunta6: {
     valor: 2000,
@@ -39,7 +38,6 @@ export const marcador = {
   pregunta10: {
     valor: 32000,
     acertada: false,
-    plantarse: true,
   },
   pregunta11: {
     valor: 64000,

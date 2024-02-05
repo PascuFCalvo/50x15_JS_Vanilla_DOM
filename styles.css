@@ -1,19 +1,21 @@
 body {
    display: flex;
    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+   font-weight: 100;
    flex-direction: column;
    justify-content: center;
    align-items: center;
    width: 100vw;
    height: auto;
-   background: rgb(179, 0, 255);
-   background: linear-gradient(90deg, rgba(179, 0, 255, 1) 0%, rgba(10, 0, 255, 1) 100%);
+
+   background: linear-gradient(90deg, rgb(26, 26, 26) 0%, rgb(4, 0, 112) 100%);
    overflow-x: hidden;
 
 }
 
 h1 {
-   color: white
+   color: white;
+
 }
 
 .pequeño {
@@ -30,7 +32,7 @@ h1 {
    box-sizing: border-box;
    overflow: hidden;
    height: 25px;
-   background-color: #00008b;
+   background-color: #313196;
    color: white;
    position: relative;
    border-radius: 25px;
@@ -62,10 +64,6 @@ h1 {
    }
 }
 
-
-
-
-
 .rondaActual,
 .puntuacion {
    width: 100px;
@@ -75,8 +73,8 @@ h1 {
 
 }
 
-.plantarse {
-   display: none;
+.flex-buttons {
+   display: flex;
 }
 
 .derecha {
@@ -86,7 +84,8 @@ h1 {
    margin-bottom: 2em;
 }
 
-.confirmar {
+.confirmar,
+.plantarse {
    padding: 1em;
    border-radius: 1em;
    border: solid 0.2em black;
@@ -94,7 +93,13 @@ h1 {
    font-size: 1em;
 }
 
-.confirmar:hover {
+.plantarse {
+   background-color: #ff3333;
+   color: white;
+}
+
+.confirmar:hover,
+.plantarse:hover {
 
    cursor: pointer;
 }
@@ -142,7 +147,7 @@ h1 {
 
 #ronda5 {
    width: 150px;
-   background-color: #00008b;
+   background-color: #313196;
 }
 
 #ronda6 {
@@ -163,7 +168,7 @@ h1 {
 
 #ronda10 {
    width: 500px;
-   background-color: #00008b;
+   background-color: #313196;
 }
 
 #ronda11 {
@@ -184,7 +189,7 @@ h1 {
 
 #ronda15 {
    width: 1100px;
-   background-color: #00008b;
+   background-color: #313196;
 }
 
 .bottom {
@@ -204,7 +209,7 @@ h1 {
    justify-content: center;
    align-items: center;
    text-align: center;
-   background-color: #00008b;
+   background-color: #313196;
    color: white;
    padding: 1em 3em;
    border: solid 0.2em white;
@@ -227,7 +232,7 @@ h1 {
    justify-content: center;
    align-items: center;
    text-align: center;
-   background-color: #00008b;
+   background-color: #313196;
 
    width: 100%;
    box-sizing: border-box;
