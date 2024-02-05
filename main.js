@@ -105,13 +105,12 @@ const resetAnimation = () => {
 };
 
 const generarNuevaPregunta = () => {
+  scrollToBottom();
   winCondition();
   calcularRondaActual();
   calcularPuntuacionActual();
   cuentaAtras();
-
   resetAnimation();
-
   resetVisibility();
   generarPregunta();
   printPregunta();
@@ -146,6 +145,17 @@ const generarPregunta = () => {
   preguntaGenerada = preguntas[`pregunta${numeroAleatorio}`];
   respuestaCorrecta = preguntaGenerada.correcta;
   console.log([...preguntasRealizadas]);
+};
+
+const scrollToBottom = () => {
+  // Use setTimeout to allow DOM updates before scrolling
+  setTimeout(() => {
+    const element = document.body;
+    element.scrollIntoView({
+      behavior: "smooth",
+      block: "end",
+    });
+  }, 0);
 };
 
 const printPregunta = () => {
