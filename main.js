@@ -77,9 +77,6 @@ botonSaltar.addEventListener("click", () => {
 const rondas = document.getElementsByClassName("ronda");
 
 const cuentaAtras = () => {
-  const tiempoHTML = document.getElementById("solucion");
-  tiempoHTML.innerHTML = tiempo;
-
   clearTimeout(cuentaAtrasTimeout);
   cuentaAtrasTimeout = setTimeout(() => {
     if (tiempo === 0) return;
@@ -112,16 +109,18 @@ const generarNuevaPregunta = () => {
   generarPregunta();
   printPregunta();
 
+  if (comodinPublicoUsado) {
+    const cuerpoGrafico = document.getElementById("bottom").lastChild;
+    cuerpoGrafico.remove();
+  }
+
   rondaActualValue++;
   document.getElementById("confirmar").style.display = "block";
-  document.getElementById("solucion").style.display = "block";
   document.getElementById("generarPregunta").style.display = "none";
-  document.getElementById("rondaActual").style.display = "block";
-  document.getElementById("puntuacion").style.display = "block";
-  document.getElementById("solucion").style.display = "block";
+  document.getElementById("hide-bottom").style.display = "block";
+
   document.getElementById("barra").style.display = "block";
   document.getElementById("solucionBola").style.display = "block";
-
   const rondas = Array.from(document.getElementsByClassName("ronda"));
   rondas.forEach((ronda, index) => {
     ronda.style.display = "block";
@@ -153,55 +152,122 @@ const printPregunta = () => {
   let preguntaHTML = document.getElementById("tituloPregunta");
   preguntaHTML.innerHTML = pregunta.pregunta;
 
-  respuesta1.innerHTML = pregunta.opciones.a;
-  respuesta2.innerHTML = pregunta.opciones.b;
-  respuesta3.innerHTML = pregunta.opciones.c;
-  respuesta4.innerHTML = pregunta.opciones.d;
+  respuesta1.innerHTML = "A: " + pregunta.opciones.a;
+  respuesta2.innerHTML = "B: " + pregunta.opciones.b;
+  respuesta3.innerHTML = "C: " + pregunta.opciones.c;
+  respuesta4.innerHTML = "D: " + pregunta.opciones.d;
 
   respuesta1.addEventListener("click", () => {
     opcionElegida = "a";
-    respuesta1.style.backgroundColor = "lightblue";
-    respuesta2.style.backgroundColor = "transparent";
-    respuesta3.style.backgroundColor = "transparent";
-    respuesta4.style.backgroundColor = "transparent";
+    respuesta1.style.backgroundColor = "white";
+    respuesta1.style.color = "#00008b";
+    respuesta2.style.backgroundColor = "#00008b";
+    respuesta2.style.color = "white";
+    respuesta3.style.backgroundColor = "#00008b";
+    respuesta3.style.color = "white";
+    respuesta4.style.backgroundColor = "#00008b";
+    respuesta4.style.color = "white";
   });
   respuesta2.addEventListener("click", () => {
     opcionElegida = "b";
-    respuesta2.style.backgroundColor = "lightblue";
-    respuesta1.style.backgroundColor = "transparent";
-    respuesta3.style.backgroundColor = "transparent";
-    respuesta4.style.backgroundColor = "transparent";
+    respuesta2.style.backgroundColor = "white";
+    respuesta2.style.color = "#00008b";
+    respuesta1.style.backgroundColor = "#00008b";
+    respuesta1.style.color = "white";
+    respuesta3.style.backgroundColor = "#00008b";
+    respuesta3.style.color = "white";
+    respuesta4.style.backgroundColor = "#00008b";
+    respuesta4.style.color = "white";
   });
   respuesta3.addEventListener("click", () => {
     opcionElegida = "c";
-    respuesta3.style.backgroundColor = "lightblue";
-    respuesta2.style.backgroundColor = "transparent";
-    respuesta1.style.backgroundColor = "transparent";
-    respuesta4.style.backgroundColor = "transparent";
+    respuesta3.style.backgroundColor = "white";
+    respuesta3.style.color = "#00008b";
+    respuesta2.style.backgroundColor = "#00008b";
+    respuesta2.style.color = "white";
+    respuesta1.style.backgroundColor = "#00008b";
+    respuesta1.style.color = "white";
+    respuesta4.style.backgroundColor = "#00008b";
+    respuesta4.style.color = "white";
   });
   respuesta4.addEventListener("click", () => {
     opcionElegida = "d";
-    respuesta4.style.backgroundColor = "lightblue";
-    respuesta2.style.backgroundColor = "transparent";
-    respuesta3.style.backgroundColor = "transparent";
-    respuesta1.style.backgroundColor = "transparent";
+    respuesta4.style.backgroundColor = "white";
+    respuesta4.style.color = "#00008b";
+    respuesta2.style.backgroundColor = "#00008b";
+    respuesta2.style.color = "white";
+    respuesta3.style.backgroundColor = "#00008b";
+    respuesta3.style.color = "white";
+    respuesta1.style.backgroundColor = "#00008b";
+    respuesta1.style.color = "white";
   });
 };
 
+const parpadeo = (opcionElegida) => {
+  const contador = 10;
+  let i = 0;
+  let opcion = "";
+
+  if (opcionElegida === "a") {
+    opcion = "respuesta1";
+  }
+  if (opcionElegida === "b") {
+    opcion = "respuesta2";
+  }
+  if (opcionElegida === "c") {
+    opcion = "respuesta3";
+  }
+  if (opcionElegida === "d") {
+    opcion = "respuesta4";
+  }
+
+  const parpadeoInterval = setInterval(() => {
+    if (i % 2 !== 0 && i < contador) {
+      document.getElementById(opcion).style.backgroundColor = "green";
+    } else {
+      document.getElementById(opcion).style.backgroundColor = "#00008b";
+    }
+
+    i++;
+
+    if (i >= contador * 2) {
+      clearInterval(parpadeoInterval);
+    }
+  }, 200);
+};
+
 const checkVictoria = () => {
-  const solucion = document.getElementById("solucion");
+  let opcion = "";
+
+  if (opcionElegida === "a") {
+    opcion = "respuesta1";
+  }
+  if (opcionElegida === "b") {
+    opcion = "respuesta2";
+  }
+  if (opcionElegida === "c") {
+    opcion = "respuesta3";
+  }
+  if (opcionElegida === "d") {
+    opcion = "respuesta4";
+  }
 
   if (opcionElegida === respuestaCorrecta) {
-    solucion.style.backgroundColor = "green";
+    parpadeo(opcionElegida);
     setTimeout(() => {
       generarNuevaPregunta();
-      rondas[rondaActualValue - 3].style.backgroundColor = "green";
-    }, 1000);
+      rondas[rondaActualValue - 3].style.backgroundColor = "goldenrod";
+    }, 2000);
   } else {
-    solucion.style.backgroundColor = "red";
+    document.getElementById(opcion).style.backgroundColor = "red";
+
     setTimeout(() => {
       alert("has perdido");
     }, 1000);
+
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
   }
 };
 
@@ -236,27 +302,264 @@ const comodinPublico = () => {
   porcentajes.push(100 - (porcentajes[0] + porcentajes[1] + porcentajes[2]));
   porcentajes.sort((a, b) => b - a);
 
+  const cuerpoGrafico = document.createElement("div");
+  cuerpoGrafico.style.display = "flex";
+  cuerpoGrafico.style.flexDirection = "column";
+  cuerpoGrafico.style.alignItems = "flex-start";
+  cuerpoGrafico.style.justifyContent = "space-around";
+  cuerpoGrafico.style.width = "400px";
+  cuerpoGrafico.style.height = "200px";
+  cuerpoGrafico.style.backgroundColor = "#00008b";
+  cuerpoGrafico.style.border = "2px solid white";
+  cuerpoGrafico.style.borderRadius = "10px";
+  cuerpoGrafico.style.margin = "1em";
+
   if (respuestaCorrecta === "a") {
-    respuesta1.innerHTML = `${preguntaGenerada.opciones.a} ${porcentajes[0]}%`;
-    respuesta2.innerHTML = `${preguntaGenerada.opciones.b} ${porcentajes[1]}%`;
-    respuesta3.innerHTML = `${preguntaGenerada.opciones.c} ${porcentajes[2]}%`;
-    respuesta4.innerHTML = `${preguntaGenerada.opciones.d} ${porcentajes[3]}%`;
+    const resultado1 = document.createElement("div");
+    resultado1.style.display = "flex";
+    resultado1.style.alignItems = "center";
+    const valor1 = document.createElement("p");
+    valor1.style.marginLeft = "10px";
+    valor1.style.color = "white";
+    valor1.innerHTML = `A: ${porcentajes[0]}%`;
+    const barra1 = document.createElement("div");
+    barra1.style.backgroundColor = "white";
+    barra1.style.width = `${porcentajes[0] * 2}px`;
+    barra1.style.height = "25px";
+    resultado1.appendChild(barra1);
+    resultado1.appendChild(valor1);
+    cuerpoGrafico.appendChild(resultado1);
+
+    const resultado2 = document.createElement("div");
+    resultado2.style.display = "flex";
+    resultado2.style.alignItems = "center";
+    const valor2 = document.createElement("p");
+    valor2.style.marginLeft = "10px";
+    valor2.style.color = "white";
+    valor2.innerHTML = `B: ${porcentajes[1]}%`;
+    const barra2 = document.createElement("div");
+    barra2.style.backgroundColor = "white";
+    barra2.style.width = `${porcentajes[1] * 2}px`;
+    barra2.style.height = "25px";
+    resultado2.appendChild(barra2);
+    resultado2.appendChild(valor2);
+
+    const resultado3 = document.createElement("div");
+    resultado3.style.display = "flex";
+    resultado3.style.alignItems = "center";
+    const valor3 = document.createElement("p");
+    valor3.style.marginLeft = "10px";
+    valor3.style.color = "white";
+    valor3.innerHTML = `C: ${porcentajes[2]}%`;
+    const barra3 = document.createElement("div");
+    barra3.style.backgroundColor = "white";
+    barra3.style.width = `${porcentajes[2] * 2}px`;
+    barra3.style.height = "25px";
+    resultado3.appendChild(barra3);
+    resultado3.appendChild(valor3);
+    cuerpoGrafico.appendChild(resultado3);
+
+    const resultado4 = document.createElement("div");
+    resultado4.style.display = "flex";
+    resultado4.style.alignItems = "center";
+    const valor4 = document.createElement("p");
+    valor4.style.marginLeft = "10px";
+    valor4.style.color = "white";
+    valor4.innerHTML = `D: ${porcentajes[3]}%`;
+    const barra4 = document.createElement("div");
+    barra4.style.backgroundColor = "white";
+    barra4.style.width = `${porcentajes[3] * 2}px`;
+    barra4.style.height = "25px";
+    resultado4.appendChild(barra4);
+    resultado4.appendChild(valor4);
+    cuerpoGrafico.appendChild(resultado4);
   } else if (respuestaCorrecta === "b") {
-    respuesta1.innerHTML = `${preguntaGenerada.opciones.a} ${porcentajes[1]}%`;
-    respuesta2.innerHTML = `${preguntaGenerada.opciones.b} ${porcentajes[0]}%`;
-    respuesta3.innerHTML = `${preguntaGenerada.opciones.c} ${porcentajes[2]}%`;
-    respuesta4.innerHTML = `${preguntaGenerada.opciones.d} ${porcentajes[3]}%`;
+    const resultado1 = document.createElement("div");
+    resultado1.style.display = "flex";
+    resultado1.style.alignItems = "center";
+    const valor1 = document.createElement("p");
+    valor1.style.marginLeft = "10px";
+    valor1.style.color = "white";
+    valor1.innerHTML = `A: ${porcentajes[1]}%`;
+    const barra1 = document.createElement("div");
+    barra1.style.backgroundColor = "white";
+    barra1.style.width = `${porcentajes[1] * 2}px`;
+    barra1.style.height = "25px";
+    resultado1.appendChild(barra1);
+    resultado1.appendChild(valor1);
+    cuerpoGrafico.appendChild(resultado1);
+
+    const resultado2 = document.createElement("div");
+    resultado2.style.display = "flex";
+    resultado2.style.alignItems = "center";
+    const valor2 = document.createElement("p");
+    valor2.style.marginLeft = "10px";
+    valor2.style.color = "white";
+    valor2.innerHTML = `B: ${porcentajes[0]}%`;
+    const barra2 = document.createElement("div");
+    barra2.style.backgroundColor = "white";
+    barra2.style.width = `${porcentajes[0] * 2}px`;
+    barra2.style.height = "25px";
+    resultado2.appendChild(barra2);
+    resultado2.appendChild(valor2);
+    cuerpoGrafico.appendChild(resultado2);
+
+    const resultado3 = document.createElement("div");
+
+    resultado3.style.display = "flex";
+    resultado3.style.alignItems = "center";
+    const valor3 = document.createElement("p");
+    valor3.style.marginLeft = "10px";
+    valor3.style.color = "white";
+    valor3.innerHTML = `C: ${porcentajes[2]}%`;
+    const barra3 = document.createElement("div");
+    barra3.style.backgroundColor = "white";
+    barra3.style.width = `${porcentajes[2] * 2}px`;
+    barra3.style.height = "25px";
+    resultado3.appendChild(barra3);
+    resultado3.appendChild(valor3);
+    cuerpoGrafico.appendChild(resultado3);
+
+    const resultado4 = document.createElement("div");
+    resultado4.style.display = "flex";
+    resultado4.style.alignItems = "center";
+    const valor4 = document.createElement("p");
+    valor4.style.marginLeft = "10px";
+    valor4.style.color = "white";
+    valor4.innerHTML = `D: ${porcentajes[3]}%`;
+    const barra4 = document.createElement("div");
+    barra4.style.backgroundColor = "white";
+    barra4.style.width = `${porcentajes[3] * 2}px`;
+    barra4.style.height = "25px";
+    resultado4.appendChild(barra4);
+    resultado4.appendChild(valor4);
+    cuerpoGrafico.appendChild(resultado4);
   } else if (respuestaCorrecta === "c") {
-    respuesta1.innerHTML = `${preguntaGenerada.opciones.a} ${porcentajes[1]}%`;
-    respuesta2.innerHTML = `${preguntaGenerada.opciones.b} ${porcentajes[2]}%`;
-    respuesta3.innerHTML = `${preguntaGenerada.opciones.c} ${porcentajes[0]}%`;
-    respuesta4.innerHTML = `${preguntaGenerada.opciones.d} ${porcentajes[3]}%`;
+    const resultado1 = document.createElement("div");
+    resultado1.style.display = "flex";
+    resultado1.style.alignItems = "center";
+    const valor1 = document.createElement("p");
+    valor1.style.marginLeft = "10px";
+    valor1.style.color = "white";
+    valor1.innerHTML = `A: ${porcentajes[1]}%`;
+    const barra1 = document.createElement("div");
+    barra1.style.backgroundColor = "white";
+    barra1.style.width = `${porcentajes[1] * 2}px`;
+    barra1.style.height = "25px";
+    resultado1.appendChild(barra1);
+    resultado1.appendChild(valor1);
+    cuerpoGrafico.appendChild(resultado1);
+
+    const resultado2 = document.createElement("div");
+
+    resultado2.style.display = "flex";
+    resultado2.style.alignItems = "center";
+    const valor2 = document.createElement("p");
+    valor2.style.marginLeft = "10px";
+    valor2.style.color = "white";
+    valor2.innerHTML = `B: ${porcentajes[2]}%`;
+    const barra2 = document.createElement("div");
+    barra2.style.backgroundColor = "white";
+    barra2.style.width = `${porcentajes[2] * 2}px`;
+    barra2.style.height = "25px";
+    resultado2.appendChild(barra2);
+    resultado2.appendChild(valor2);
+    cuerpoGrafico.appendChild(resultado2);
+
+    const resultado3 = document.createElement("div");
+    resultado3.style.display = "flex";
+    resultado3.style.alignItems = "center";
+    const valor3 = document.createElement("p");
+    valor3.style.marginLeft = "10px";
+    valor3.style.color = "white";
+    valor3.innerHTML = `C: ${porcentajes[0]}%`;
+    const barra3 = document.createElement("div");
+    barra3.style.backgroundColor = "white";
+    barra3.style.width = `${porcentajes[0] * 2}px`;
+    barra3.style.height = "25px";
+    resultado3.appendChild(barra3);
+    resultado3.appendChild(valor3);
+    cuerpoGrafico.appendChild(resultado3);
+
+    const resultado4 = document.createElement("div");
+
+    resultado4.style.display = "flex";
+    resultado4.style.alignItems = "center";
+    const valor4 = document.createElement("p");
+    valor4.style.marginLeft = "10px";
+    valor4.style.color = "white";
+    valor4.innerHTML = `D: ${porcentajes[3]}%`;
+    const barra4 = document.createElement("div");
+    barra4.style.backgroundColor = "white";
+    barra4.style.width = `${porcentajes[3] * 2}px`;
+    barra4.style.height = "25px";
+    resultado4.appendChild(barra4);
+    resultado4.appendChild(valor4);
+    cuerpoGrafico.appendChild(resultado4);
   } else if (respuestaCorrecta === "d") {
-    respuesta1.innerHTML = `${preguntaGenerada.opciones.a} ${porcentajes[1]}%`;
-    respuesta2.innerHTML = `${preguntaGenerada.opciones.b} ${porcentajes[2]}%`;
-    respuesta3.innerHTML = `${preguntaGenerada.opciones.c} ${porcentajes[3]}%`;
-    respuesta4.innerHTML = `${preguntaGenerada.opciones.d} ${porcentajes[0]}%`;
+    const resultado1 = document.createElement("div");
+    resultado1.style.display = "flex";
+    resultado1.style.alignItems = "center";
+    const valor1 = document.createElement("p");
+    valor1.style.marginLeft = "10px";
+    valor1.style.color = "white";
+    valor1.innerHTML = `A: ${porcentajes[1]}%`;
+    const barra1 = document.createElement("div");
+    barra1.style.backgroundColor = "white";
+    barra1.style.width = `${porcentajes[1] * 2}px`;
+    barra1.style.height = "25px";
+    resultado1.appendChild(barra1);
+    resultado1.appendChild(valor1);
+    cuerpoGrafico.appendChild(resultado1);
+
+    const resultado2 = document.createElement("div");
+    resultado2.style.display = "flex";
+    resultado2.style.alignItems = "center";
+    const valor2 = document.createElement("p");
+    valor2.style.marginLeft = "10px";
+    valor2.style.color = "white";
+    valor2.innerHTML = `B: ${porcentajes[2]}%`;
+    const barra2 = document.createElement("div");
+    barra2.style.backgroundColor = "white";
+    barra2.style.width = `${porcentajes[2] * 2}px`;
+    barra2.style.height = "25px";
+    resultado2.appendChild(barra2);
+    resultado2.appendChild(valor2);
+    cuerpoGrafico.appendChild(resultado2);
+
+    const resultado3 = document.createElement("div");
+    resultado3.style.display = "flex";
+    resultado3.style.alignItems = "center";
+    const valor3 = document.createElement("p");
+    valor3.style.marginLeft = "10px";
+    valor3.style.color = "white";
+    valor3.innerHTML = `C: ${porcentajes[3]}%`;
+    const barra3 = document.createElement("div");
+    barra3.style.backgroundColor = "white";
+    barra3.style.width = `${porcentajes[3] * 2}px`;
+    barra3.style.height = "25px";
+    resultado3.appendChild(barra3);
+    resultado3.appendChild(valor3);
+    cuerpoGrafico.appendChild(resultado3);
+
+    const resultado4 = document.createElement("div");
+    resultado4.style.display = "flex";
+    resultado4.style.alignItems = "center";
+    const valor4 = document.createElement("p");
+    valor4.style.marginLeft = "10px";
+    valor4.style.color = "white";
+    valor4.innerHTML = `D: ${porcentajes[0]}%`;
+    const barra4 = document.createElement("div");
+    barra4.style.backgroundColor = "white";
+    barra4.style.width = `${porcentajes[0] * 2}px`;
+    barra4.style.height = "25px";
+    resultado4.appendChild(barra4);
+    resultado4.appendChild(valor4);
+    cuerpoGrafico.appendChild(resultado4);
   }
+
+  const bottom = document.getElementById("bottom");
+  bottom.appendChild(cuerpoGrafico);
 
   comodinPublicoUsado = true;
   botonpublico.style.backgroundColor = "red";
@@ -275,16 +578,18 @@ const comodinSaltarPregunta = () => {
 };
 
 const resetVisibility = () => {
-  respuesta4.style.backgroundColor = "transparent";
-  respuesta2.style.backgroundColor = "transparent";
-  respuesta3.style.backgroundColor = "transparent";
-  respuesta1.style.backgroundColor = "transparent";
+  respuesta4.style.backgroundColor = "#00008b";
+  respuesta2.style.backgroundColor = "#00008b";
+  respuesta3.style.backgroundColor = "#00008b";
+  respuesta1.style.backgroundColor = "#00008b";
+  respuesta4.style.color = "white";
+  respuesta2.style.color = "white";
+  respuesta3.style.color = "white";
+  respuesta1.style.color = "white";
   respuesta1.style.visibility = "visible";
   respuesta2.style.visibility = "visible";
   respuesta3.style.visibility = "visible";
   respuesta4.style.visibility = "visible";
-  let solucion = document.getElementById("solucion");
-  solucion.style.backgroundColor = "black";
 };
 
 const calcularRondaActual = () => {
